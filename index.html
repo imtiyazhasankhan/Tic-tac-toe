@@ -1,0 +1,190 @@
+<!-- Prarambh : 19June2022pH 7:12 -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+</head>
+<style>
+    * {
+        width: 0;
+        height: 0;
+    }
+
+    .gameContainer {
+        position: fixed;
+        background-color: aquamarine;
+        margin: auto;
+        width: 90vw;
+        height: 90vh;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+    }
+
+    .squaresContainer {
+        display: grid;
+        grid-template-columns: auto auto auto;
+        grid-template-rows: auto auto auto;
+        background-color: rgb(227, 171, 255);
+        width: fit-content;
+        height: fit-content;
+        margin: auto;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        position: fixed;
+    }
+
+    .squares {
+        width: 100px;
+        height: 100px;
+        margin: 10px;
+        background-color: blue;
+        transition: all 0.7s;
+        color: #00000000;
+        font-size: 57px;
+        line-height: 100px;
+        text-align: center;
+    }
+
+    .winningSquares {
+        transform: rotate(9deg);
+        filter: invert(1);
+    }
+</style>
+
+<body>
+    <div class="gameContainer">
+        <div class="squaresContainer">
+            <div class="squares" id="sq0">0</div>
+            <div class="squares" id="sq1">1</div>
+            <div class="squares" id="sq2">2</div>
+            <div class="squares" id="sq3">3</div>
+            <div class="squares" id="sq4">4</div>
+            <div class="squares" id="sq5">5</div>
+            <div class="squares" id="sq6">6</div>
+            <div class="squares" id="sq7">7</div>
+            <div class="squares" id="sq8">8</div>
+        </div>
+    </div>
+
+    <script>
+
+        let X_or_O = ["x", "o"]
+        let random_0or1 = Math.floor(Math.random() * (X_or_O.length))
+        // upperCode will return the random number according to list (X_or_O) length (in this case it will return 0 or 1)
+        let random_valueOf_OX = (random_0or1, X_or_O[random_0or1])
+
+        function changeValueOf_OX(user_value) {
+            // this function will swap the value of x_o ( if its "x" then it will make it "o")
+            user_value = random_valueOf_OX
+            if (user_value === "x") { random_valueOf_OX = "o" }
+            if (user_value === "o") { random_valueOf_OX = "x" }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            [].forEach.call(document.querySelectorAll(".squares"), function (el) {
+                el.addEventListener("click", function () {
+                    this.innerText = (random_valueOf_OX);
+                    this.style.color = "#ffffff"
+                    changeValueOf_OX() // Changing the value of "o x"
+                    function winningFunction() {
+                        // Boxes are below :
+                        let _1 = document.getElementById("sq0").innerText;
+                        let _2 = document.getElementById("sq1").innerText;
+                        let _3 = document.getElementById("sq2").innerText;
+                        let _4 = document.getElementById("sq3").innerText;
+                        let _5 = document.getElementById("sq4").innerText;
+                        let _6 = document.getElementById("sq5").innerText;
+                        let _7 = document.getElementById("sq6").innerText;
+                        let _8 = document.getElementById("sq7").innerText;
+                        let _9 = document.getElementById("sq8").innerText;
+
+                        // if first line's values will be equal
+                        if ((_1 === _2) && (_2 === _3)) {
+                            let squares = document.getElementsByClassName("squares")
+                            for (let i = 0; i < squares.length; i++) {
+                                let winingSquares = document.getElementById(`sq${i}`);
+                                winingSquares.classList.add("winningSquares")
+                                if (i === 2) {break}
+                            }
+                        }
+                        // if 2nd line's values will be equal
+                        if ((_4 === _5) && (_5 === _6)) {
+                            let squares = document.getElementsByClassName("squares")
+                            for (let i = 3; i < squares.length; i++) {
+                                let winingSquares = document.getElementById(`sq${i}`);
+                                winingSquares.classList.add("winningSquares")
+                                if (i === 5) {break}
+                            }
+                        }
+                        // if 3rd line's values will be equal
+                        if ((_7 === _8) && (_8 === _9)) {
+                            let squares = document.getElementsByClassName("squares")
+                            for (let i = 6; i < squares.length; i++) {
+                                let winingSquares = document.getElementById(`sq${i}`);
+                                winingSquares.classList.add("winningSquares")
+                                if (i === 9) {break}
+                            }
+                        }
+                        // if vertical 1st line' svalues will be equal
+                        if ((_1 === _4) && (_4 === _7)) {
+                            let squares = document.getElementsByClassName("squares")
+                            for (let i = 0; i < squares.length; i += 3) {
+                                let winingSquares = document.getElementById(`sq${i}`);
+                                winingSquares.classList.add("winningSquares")
+                                if (i === 6) {break}
+                            }
+                        }
+                        // if vertical 2st line's values will be equal
+                        if ((_2 === _5) && (_5 === _8)) {
+                            let squares = document.getElementsByClassName("squares")
+                            for (let i = 1; i < squares.length; i += 3) {
+                                let winingSquares = document.getElementById(`sq${i}`);
+                                winingSquares.classList.add("winningSquares")
+                                if (i === 7) {break}
+                            }
+                        }
+                        // if vertical 3rd line's values will be equal
+                        if ((_3 === _6) && (_6 === _9)) {
+                            let squares = document.getElementsByClassName("squares")
+                            for (let i = 2; i < squares.length; i += 3) {
+                                let winingSquares = document.getElementById(`sq${i}`);
+                                winingSquares.classList.add("winningSquares")
+                                if (i === 8) {break}
+                            }
+                        }
+                        /* X winning condition \/ (1,5,9 or 3,5,7)*/
+                        // if (topLeft === center && center == bottomRight)
+                        if ((_1 === _5) && (_5 === _9)) {
+                            let squares = document.getElementsByClassName("squares")
+                            for (let i = 0; i < squares.length; i += 4) {
+                                let winingSquares = document.getElementById(`sq${i}`);
+                                winingSquares.classList.add("winningSquares")
+                                if (i === 8) {break}
+                            }
+                        }
+                        // if (topRight === center && center == bottomLeft)
+                        if ((_5 === _5) && (_5 === _7)) {
+                            let squares = document.getElementsByClassName("squares")
+                            for (let i = 2; i < squares.length; i += 2) {
+                                let winingSquares = document.getElementById(`sq${i}`);
+                                winingSquares.classList.add("winningSquares")
+                                if (i === 6) {break}
+                            }
+                        }
+                    }
+                    winningFunction()
+                })
+            })
+        })
+    </script>
+</body>
+</html>
+<!-- 20 June 2022pH 7:49 : Almost completed (logical things) -->
