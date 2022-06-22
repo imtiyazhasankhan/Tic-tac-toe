@@ -12,40 +12,82 @@
     * {
         width: 0;
         height: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        user-select: none;
     }
 
-    .gameContainer {
+    .gameCenterer{
+        width: 80vw;
+        height: 80vh;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         position: fixed;
-        background-color: aquamarine;
+        left: 0; right: 0; top: 0; bottom: 0;
         margin: auto;
-        width: 90vw;
-        height: 90vh;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
+        padding: 40px;
+        background-color: #f5f5f5;
+        border-radius: 36px;
+    }
+    .gameContainer {
+        /* Rainbow background code is taken from https://blog.logrocket.com/advanced-effects-with-css-background-blend-modes-4b750198522a/ */
+        background:
+        linear-gradient(#ff153c, transparent),
+        linear-gradient(to top left, #1dff1d, transparent),
+        linear-gradient(to top right, blue, transparent);
+        background-blend-mode: screen;
+        border-radius: 33px;
+        padding: 20px 7px;
+        width: fit-content;
+        height: fit-content;
+        width: 360px;
+        height: 477px;
+        position: relative;
+
+    }
+    .gameContainer h1{
+        width: fit-content;
+        height: fit-content;
+        color: white;
+        margin: auto;
+    }
+    .gameContainer button{
+        display: block;
+        width: fit-content;
+        height: fit-content;
+        border-radius: 15px;
+        padding: 8px 20px;
+        border: none;
+        background-color: #ffffff7c;
+        font-size: 1.1rem;
+        position: absolute;
+        bottom: 18.8px;
+        margin: auto;
+        transition: transform 0.8s;
+        transform: scale(0);
+        bottom: 16px;
+        right: 16px;
     }
 
     .squaresContainer {
         display: grid;
         grid-template-columns: auto auto auto;
         grid-template-rows: auto auto auto;
-        background-color: rgb(227, 171, 255);
         width: fit-content;
-        height: fit-content;
-        margin: auto;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        position: fixed;
+        width: auto;
+        height: auto;
+        margin: 20px auto;
+        position: relative;
     }
 
-    .squares {
+    .squares, .xengshi {
         width: 100px;
         height: 100px;
         margin: 10px;
-        background-color: blue;
+        /* display: none; */
+        background-color: #ffffff7c;
+        box-shadow: rgb(220, 220, 220) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
         transition: all 0.7s;
         color: #00000000;
         font-size: 57px;
@@ -54,32 +96,67 @@
     }
 
     .winningSquares {
-        transform: rotate(9deg);
+        transform: rotate(-9deg);
         filter: invert(1);
+    }
+
+    #winner{
+        width: fit-content;
+        height: fit-content;
+        color: white;
+        transition: transform 0.8s;
+        transform: translateY(-24px);
+        font-size: 2rem;
+        bottom: 16px;
+        left: 16px;
+        position: absolute;
+        margin: auto;
+    }
+
+    @media only screen and (max-width: 500px){
+        .gameCenterer{
+            background-color: #00000000;
+        }
+        .gameContainer{
+            transform: scale(0.9);
+        }
+    }
+    @media only screen and (max-width: 390px){
+        .gameCenterer{
+            width: 70vw;
+        }
+        .gameContainer{
+            transform: scale(0.8);
+        }
     }
 </style>
 
 <body>
-    <div class="gameContainer">
-        <div class="squaresContainer">
-            <div class="squares" id="sq0">0</div>
-            <div class="squares" id="sq1">1</div>
-            <div class="squares" id="sq2">2</div>
-            <div class="squares" id="sq3">3</div>
-            <div class="squares" id="sq4">4</div>
-            <div class="squares" id="sq5">5</div>
-            <div class="squares" id="sq6">6</div>
-            <div class="squares" id="sq7">7</div>
-            <div class="squares" id="sq8">8</div>
+    <div class="gameCenterer">
+        <div class="gameContainer">
+            <h1>TicTacToe</h1>
+            <div class="squaresContainer">
+                <div class="squares xengshi" id="sq0">0</div>
+                <div class="squares xengshi" id="sq1">1</div>
+                <div class="squares xengshi" id="sq2">2</div>
+                <div class="squares xengshi" id="sq3">3</div>
+                <div class="squares xengshi" id="sq4">4</div>
+                <div class="squares xengshi" id="sq5">5</div>
+                <div class="squares xengshi" id="sq6">6</div>
+                <div class="squares xengshi" id="sq7">7</div>
+                <div class="squares xengshi" id="sq8">8</div>
+            </div>
+            <div id="winner"></div>
+            <button id="reloadButton" onclick="reload()">Play Again</button>
         </div>
     </div>
-
     <script>
 
         let X_or_O = ["x", "o"]
         let random_0or1 = Math.floor(Math.random() * (X_or_O.length))
         // upperCode will return the random number according to list (X_or_O) length (in this case it will return 0 or 1)
         let random_valueOf_OX = (random_0or1, X_or_O[random_0or1])
+        let squares = document.getElementsByClassName("squares")
 
         function changeValueOf_OX(user_value) {
             // this function will swap the value of x_o ( if its "x" then it will make it "o")
@@ -87,12 +164,29 @@
             if (user_value === "x") { random_valueOf_OX = "o" }
             if (user_value === "o") { random_valueOf_OX = "x" }
         }
+    
+        let win = (winingSquares) => {
+            setTimeout(() => {
+                for (let i = 0; i < squares.length; i++) {
+                    squares[i].classList.remove("squares")
+                }
+                let currentInnerText = winingSquares.innerText
+                let winner = document.getElementById("winner")
+                winner.innerText = `"${currentInnerText}" Win!`
+                winner.style.textTransform = "uppercase"
+                winner.style.transform = "translateY(0px)"
+                setTimeout(() => {
+                    winingSquares.style.transform = "rotate(9deg)"
+                    document.getElementById("reloadButton").style.transform = 'scale(1)'
+                }, 1000);
+            }, 100);
+        }
 
         document.addEventListener("DOMContentLoaded", function () {
-            [].forEach.call(document.querySelectorAll(".squares"), function (el) {
+            [].forEach.call(squares, function (el) {
                 el.addEventListener("click", function () {
                     this.innerText = (random_valueOf_OX);
-                    this.style.color = "#ffffff"
+                    this.style.color = "#000"
                     changeValueOf_OX() // Changing the value of "o x"
                     function winningFunction() {
                         // Boxes are below :
@@ -106,85 +200,85 @@
                         let _8 = document.getElementById("sq7").innerText;
                         let _9 = document.getElementById("sq8").innerText;
 
-                        // if first line's values will be equal
-                        if ((_1 === _2) && (_2 === _3)) {
-                            let squares = document.getElementsByClassName("squares")
-                            for (let i = 0; i < squares.length; i++) {
+                        /* Read Below code to understand the below function */
+                        // if ((_1 === _2) && (_2 === _3)) {
+                        //     for (let i = 0; i < squares.length; i++) {
+                        //         let winingSquares = document.getElementById(`sq${i}`);
+                        //         winingSquares.classList.add("winningSquares")
+                        //         win(winingSquares)
+                        //         if (i === 2) { break }
+                        //     }
+                        // }
+
+                        function horizontalWinningFunc(initialIndexValue, breakPoint){
+                            for (let i = initialIndexValue; i < squares.length; i++) {
                                 let winingSquares = document.getElementById(`sq${i}`);
                                 winingSquares.classList.add("winningSquares")
-                                if (i === 2) {break}
+                                win(winingSquares)
+                                if (i === breakPoint) { break }
                             }
+                        }
+
+                        function vertical_and_slanting_WinningFunc(initialIndexValue, steps, breakPoint){
+                            for (let i = initialIndexValue; i < squares.length; i+= steps) {
+                                let winingSquares = document.getElementById(`sq${i}`);
+                                winingSquares.classList.add("winningSquares")
+                                win(winingSquares)
+                                if (i === breakPoint) { break }
+                            }
+                        }
+
+                        let squares = document.getElementsByClassName("squares")
+                        
+                        /*________________Winning Conditions_____________________________*/
+
+                        // if first line's values will be equal
+                        if ((_1 === _2) && (_2 === _3)) {
+                            horizontalWinningFunc(0,2)
                         }
                         // if 2nd line's values will be equal
                         if ((_4 === _5) && (_5 === _6)) {
-                            let squares = document.getElementsByClassName("squares")
-                            for (let i = 3; i < squares.length; i++) {
-                                let winingSquares = document.getElementById(`sq${i}`);
-                                winingSquares.classList.add("winningSquares")
-                                if (i === 5) {break}
-                            }
+                            horizontalWinningFunc(3,5)
                         }
                         // if 3rd line's values will be equal
                         if ((_7 === _8) && (_8 === _9)) {
-                            let squares = document.getElementsByClassName("squares")
-                            for (let i = 6; i < squares.length; i++) {
-                                let winingSquares = document.getElementById(`sq${i}`);
-                                winingSquares.classList.add("winningSquares")
-                                if (i === 9) {break}
-                            }
+                            horizontalWinningFunc(6,9)
                         }
-                        // if vertical 1st line' svalues will be equal
+
+                        // if vertical 1st (1st start with left side) line's values will be equal
                         if ((_1 === _4) && (_4 === _7)) {
-                            let squares = document.getElementsByClassName("squares")
-                            for (let i = 0; i < squares.length; i += 3) {
-                                let winingSquares = document.getElementById(`sq${i}`);
-                                winingSquares.classList.add("winningSquares")
-                                if (i === 6) {break}
-                            }
+                            vertical_and_slanting_WinningFunc(0,3,6)
                         }
                         // if vertical 2st line's values will be equal
                         if ((_2 === _5) && (_5 === _8)) {
-                            let squares = document.getElementsByClassName("squares")
-                            for (let i = 1; i < squares.length; i += 3) {
-                                let winingSquares = document.getElementById(`sq${i}`);
-                                winingSquares.classList.add("winningSquares")
-                                if (i === 7) {break}
-                            }
+                            vertical_and_slanting_WinningFunc(1,3,7)
                         }
                         // if vertical 3rd line's values will be equal
                         if ((_3 === _6) && (_6 === _9)) {
-                            let squares = document.getElementsByClassName("squares")
-                            for (let i = 2; i < squares.length; i += 3) {
-                                let winingSquares = document.getElementById(`sq${i}`);
-                                winingSquares.classList.add("winningSquares")
-                                if (i === 8) {break}
-                            }
+                            vertical_and_slanting_WinningFunc(2,3,8)
                         }
+
                         /* X winning condition \/ (1,5,9 or 3,5,7)*/
                         // if (topLeft === center && center == bottomRight)
                         if ((_1 === _5) && (_5 === _9)) {
-                            let squares = document.getElementsByClassName("squares")
-                            for (let i = 0; i < squares.length; i += 4) {
-                                let winingSquares = document.getElementById(`sq${i}`);
-                                winingSquares.classList.add("winningSquares")
-                                if (i === 8) {break}
-                            }
+                            vertical_and_slanting_WinningFunc(0,4,8)
                         }
                         // if (topRight === center && center == bottomLeft)
-                        if ((_5 === _5) && (_5 === _7)) {
-                            let squares = document.getElementsByClassName("squares")
-                            for (let i = 2; i < squares.length; i += 2) {
-                                let winingSquares = document.getElementById(`sq${i}`);
-                                winingSquares.classList.add("winningSquares")
-                                if (i === 6) {break}
-                            }
+                        if ((_3 === _5) && (_5 === _7)) {
+                            vertical_and_slanting_WinningFunc(2,2,6)
                         }
                     }
                     winningFunction()
                 })
             })
         })
+
+        function reload(){
+            document.location.reload();
+        }
+
     </script>
 </body>
 </html>
 <!-- 20 June 2022pH 7:49 : Almost completed (logical things) -->
+<!-- 21 June 2022pH 8:52++ : Make code more functional and compact improved userInterface -->
